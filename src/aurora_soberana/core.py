@@ -68,7 +68,7 @@ class AuroraGovernance:
             "actor": context.actor,
             "action": context.action,
             "resource": context.resource,
-            "purpose_present": bool(context.purpose.strip()),
+            "purpose_present": isinstance(context.purpose, str) and bool(context.purpose.strip()),
             "classification": context.data_classification,
             "allowed": allowed,
             "reason": reason,
