@@ -1,5 +1,8 @@
 # Aurora Soberana | Núcleo conceitual de inteligência artificial
 
+<p align="center"><img src="PROJECT-OVERVIEW.svg" alt="Diagrama explicativo de Aurora Soberana" width="100%"></p>
+
+
 Repositório inicial para organizar a visão, os requisitos e a evolução técnica do projeto Aurora Soberana, uma iniciativa conceitual da Impulso Digital voltada a sistemas de IA com governança, rastreabilidade, explicabilidade e controle responsável de dados.
 
 > **Maturidade:** repositório inicial de documentação. No momento deste commit, o repositório não contém implementação executável. As capacidades descritas nesta página são objetivos de projeto, não funcionalidades disponíveis ou validadas.
@@ -57,3 +60,6 @@ Issues e pull requests devem descrever contexto, comportamento esperado, riscos 
 ## Licença
 
 Nenhuma licença foi definida neste commit. Não presuma permissão de reutilização até que um arquivo de licença seja adicionado.
+
+
+**Empresa responsável:** Impulso Digital Soluções em IA.
