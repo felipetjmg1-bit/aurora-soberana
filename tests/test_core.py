@@ -50,3 +50,12 @@ def test_audit_chain_detects_tampering():
     engine.evaluate(RequestContext("operator-1", "read", "catalog", "support"))
     engine._events[0]["actor"] = "changed"
     assert not engine.verify_audit_chain()
+
+
+
+def test_missing_purpose_is_denied_without_crashing():
+    decision = AuroraGovernance(policy()).evaluate(
+        RequestContext("operator-1", "read", "catalog", None)  # type: ignore[arg-type]
+    )
+    assert decision.allowed is False
+    assert decision.reason == "purpose_required"
