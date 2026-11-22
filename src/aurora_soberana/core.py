@@ -82,8 +82,14 @@ class AuroraGovernance:
         return Decision(request_id, allowed, reason, "1.0", event_hash)
 
     def _deny_reason(self, context: RequestContext) -> str | None:
-        if not context.actor.strip() or not context.action.strip() or not context.resource.strip():
+        if (
+            not isinstance(context.actor, str) or not context.actor.strip()
+            or not isinstance(context.action, str) or not context.action.strip()
+            or not isinstance(context.resource, str) or not context.resource.strip()
+        ):
             return "missing_identity_action_or_resource"
+        if not isinstance(context.purpose, str):
+            return "purpose_required"
         if self.policy.require_purpose and not context.purpose.strip():
             return "purpose_required"
         if context.actor not in self.policy.allowed_actors:
