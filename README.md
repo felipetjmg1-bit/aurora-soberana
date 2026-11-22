@@ -1,65 +1,50 @@
-# Aurora Soberana | Núcleo conceitual de inteligência artificial
+# Aurora Soberana
 
-<p align="center"><img src="PROJECT-OVERVIEW.svg" alt="Diagrama explicativo de Aurora Soberana" width="100%"></p>
+<p align="center"><img src="PROJECT-OVERVIEW.svg" alt="Diagrama explicativo da Aurora Soberana" width="100%"></p>
 
+**Impulso Digital Soluções em IA** · Python · governança · XAI · auditoria · CPU-first
 
-Repositório inicial para organizar a visão, os requisitos e a evolução técnica do projeto Aurora Soberana, uma iniciativa conceitual da Impulso Digital voltada a sistemas de IA com governança, rastreabilidade, explicabilidade e controle responsável de dados.
+Núcleo executável local para avaliação de políticas de acesso e registro verificável de decisões. A implementação adota negação por padrão, regras explícitas e trilha de auditoria encadeada por SHA-256.
 
-> **Maturidade:** documentação de arquitetura em desenvolvimento. O repositório ainda não contém implementação executável. As capacidades descritas nesta página são objetivos de projeto, não funcionalidades disponíveis ou validadas.
+## Instalação e testes
 
-## Objetivos
-
-- Definir uma arquitetura modular para serviços de IA.
-- Documentar entradas, saídas, dependências e limites de cada módulo.
-- Incorporar práticas de explicabilidade (XAI), avaliação e rastreabilidade.
-- Planejar controles de privacidade, segurança e governança de dados.
-- Permitir validação incremental por testes reproduzíveis.
-
-## Arquitetura de referência proposta
-
-A arquitetura abaixo é um ponto de partida para discussão e não representa componentes já implementados.
-
-```mermaid
-flowchart TD
-  U[Aplicações e usuários] --> G[Gateway e políticas de acesso]
-  G --> O[Orquestração]
-  O --> M[Adaptadores de modelos]
-  O --> R[Recuperação e contexto]
-  M --> X[Explicabilidade e avaliação]
-  R --> X
-  X --> A[Auditoria e observabilidade]
-  A --> D[Relatórios e trilhas de decisão]
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+pytest -q
 ```
 
-## Princípios de engenharia
+## Exemplo
 
-1. **Segurança por padrão:** segredos fora do código, permissões mínimas e validação de entradas.
-2. **Privacidade:** minimizar dados coletados e documentar retenção e finalidade.
-3. **Explicabilidade:** registrar evidências, incertezas e limites das respostas.
-4. **Modularidade:** interfaces explícitas e componentes testáveis isoladamente.
-5. **Reprodutibilidade:** versões fixadas, testes automatizados e instruções claras.
-6. **Transparência:** distinguir protótipo, experimento e produção.
+```python
+from aurora_soberana import AuroraGovernance, Policy, RequestContext
 
-## Plano inicial
+policy = Policy(
+    allowed_actors=frozenset({"operador"}),
+    allowed_actions=frozenset({"consultar"}),
+    allowed_resources=frozenset({"relatorio-publico"}),
+)
+engine = AuroraGovernance(policy)
+decision = engine.evaluate(RequestContext(
+    actor="operador",
+    action="consultar",
+    resource="relatorio-publico",
+    purpose="consulta demonstrativa",
+))
+print(decision.to_dict())
+print("Auditoria íntegra:", engine.verify_audit_chain())
+```
 
-- [ ] Definir casos de uso e requisitos não funcionais.
-- [ ] Escolher linguagem, runtime e estrutura de pacotes.
-- [ ] Especificar contratos de API e modelo de ameaças.
-- [ ] Criar um primeiro módulo executável com testes.
-- [ ] Adicionar CI, análise estática e política de segurança.
-- [ ] Publicar benchmarks e documentação de limitações.
+## Controles implementados
 
-## Como usar
+- Política restritiva por padrão, sem permissões implícitas.
+- Verificação de ator, ação, recurso, finalidade e classificação.
+- Referência de consentimento exigida para categorias pessoais/sensíveis quando habilitada.
+- Registro de decisões sem guardar payloads ou conteúdo pessoal.
+- Encadeamento SHA-256 com verificação de integridade em memória.
+- Testes unitários e CI para Python 3.11.
 
-Ainda não há instalação ou execução disponível. Acompanhe este README e o histórico de commits para identificar quando um primeiro componente executável for publicado.
+## Limitações e implantação
 
-## Contribuição
-
-Issues e pull requests devem descrever contexto, comportamento esperado, riscos e evidências de validação. Não publique credenciais, dados pessoais ou informações restritas.
-
-## Licença
-
-Nenhuma licença foi definida neste commit. Não presuma permissão de reutilização até que um arquivo de licença seja adicionado.
-
-
-**Empresa responsável:** Impulso Digital Soluções em IA.
+O ledger é mantido em memória e não é armazenamento imutável, assinatura digital ou prova externa. A política é configurada em código e ainda não possui painel administrativo, persistência transacional, autenticação de usuários, gestão de chaves ou integração com provedores de identidade. Antes de qualquer uso compartilhado, implemente persistência protegida, autenticação, gestão de segredos, revisão de ameaças, retenção e testes de carga. Não use como infraestrutura crítica ou serviço certificado.
