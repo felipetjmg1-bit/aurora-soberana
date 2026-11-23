@@ -48,3 +48,8 @@ print("Auditoria íntegra:", engine.verify_audit_chain())
 ## Limitações e implantação
 
 O ledger é mantido em memória e não é armazenamento imutável, assinatura digital ou prova externa. A política é configurada em código e ainda não possui painel administrativo, persistência transacional, autenticação de usuários, gestão de chaves ou integração com provedores de identidade. Antes de qualquer uso compartilhado, implemente persistência protegida, autenticação, gestão de segredos, revisão de ameaças, retenção e testes de carga. Não use como infraestrutura crítica ou serviço certificado.
+
+
+## Fluxo passo a passo
+
+Consulte o [guia textual com as etapas do projeto](docs/PROCESSO-PASSO-A-PASSO.md). O infográfico acima resume visualmente o mesmo fluxo.
